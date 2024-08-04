@@ -1,0 +1,10 @@
+[package]
+name = "rgfw"
+version = "0.1.0"
+description = "Safe Rust bindings for RGFW."
+readme = "../README.md"
+keywords = ["bindings", "windowing", "crossplatform"]
+edition = "2021"
+
+[dependencies]
+rgfw-sys = { path = "../rgfw-sys" }
