@@ -1,3 +1,4 @@
+use core::str;
 use std::ffi::CString;
 
 use rgfw_sys::*;
@@ -42,6 +43,11 @@ impl Window {
             title: window_title,
         }
     }
+
+    pub fn title(&self) -> &str {
+        str::from_utf8(self.title.as_bytes()).expect("Window::title should be a valid string")
+    }
+
     pub fn get_window_ptr(&self) -> *mut RGFW_window {
         self.ptr
     }
