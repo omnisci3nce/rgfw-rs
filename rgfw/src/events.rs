@@ -4,7 +4,7 @@ use crate::Window;
 
 impl Window {
     pub fn check_event(&self) -> Option<rgfw_sys::RGFW_Event> {
-        let ev = unsafe { RGFW_window_checkEvent(self.0) };
+        let ev = unsafe { RGFW_window_checkEvent(self.ptr) };
         if ev.is_null() {
             return None;
         }
