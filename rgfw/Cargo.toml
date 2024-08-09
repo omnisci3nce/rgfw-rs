@@ -7,4 +7,6 @@ keywords = ["bindings", "windowing", "crossplatform"]
 edition = "2021"
 
 [dependencies]
+num-derive = "0.4.2"
+num-traits = "0.2.19"
 rgfw-sys = { path = "../rgfw-sys" }

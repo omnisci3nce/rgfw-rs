@@ -1,9 +1,12 @@
 use core::str;
+use rgfw_sys::*;
 use std::ffi::CString;
 
-use rgfw_sys::*;
-
 pub mod events;
+pub mod input;
+pub mod utils;
+
+use utils::u8_to_bool;
 
 /// Wrapper around the raw window pointer
 pub struct Window {
@@ -17,14 +20,6 @@ impl Drop for Window {
             RGFW_window_close(self.ptr);
         }
     }
-}
-
-pub enum Key {
-    Up = rgfw_sys::RGFW_Up as isize,
-    Down = rgfw_sys::RGFW_Down as isize,
-    Left = rgfw_sys::RGFW_Left as isize,
-    Right = rgfw_sys::RGFW_Right as isize,
-    Escape = rgfw_sys::RGFW_Escape as isize,
 }
 
 impl Window {
@@ -52,10 +47,6 @@ impl Window {
         self.ptr
     }
 
-    pub fn is_pressed(&self, key: Key) -> bool {
-        u8_to_bool(unsafe { RGFW_isPressed(self.ptr, key as u8) })
-    }
-
     pub fn should_close(&self) -> bool {
         u8_to_bool(unsafe { RGFW_window_shouldClose(self.ptr) })
     }
@@ -66,6 +57,24 @@ impl Window {
     }
 }
 
-fn u8_to_bool(int: u8) -> bool {
-    int != 0
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Area {
+    w: u32,
+    h: u32,
+}
+impl Area {
+    pub fn new(width: u32, height: u32) -> Self {
+        Self {
+            w: width,
+            h: height,
+        }
+    }
+}
+impl From<Area> for rgfw_sys::RGFW_area {
+    fn from(area: Area) -> Self {
+        Self {
+            w: area.w,
+            h: area.h,
+        }
+    }
 }
