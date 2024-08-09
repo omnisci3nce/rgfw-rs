@@ -8,13 +8,21 @@ fn main() {
     // Tell cargo to look for shared libraries in the specified directory
     // println!("cargo:rustc-link-search=/path/to/lib");
 
-    // TODO: Figure out how to make cross-platform. Can we use the Makefile in some way?
-    println!("cargo:rustc-link-lib=Xrandr");
-    println!("cargo:rustc-link-lib=X11");
-    println!("cargo:rustc-link-lib=m");
-    println!("cargo:rustc-link-lib=GL");
-    println!("cargo:rustc-link-lib=dl");
-    println!("cargo:rustc-link-lib=pthread");
+    let target_os =
+        env::var("CARGO_CFG_TARGET_OS").expect("target_os could not be loaded from env");
+    if target_os == "linux" {
+        println!("cargo:rustc-link-lib=Xrandr");
+        println!("cargo:rustc-link-lib=X11");
+        println!("cargo:rustc-link-lib=m");
+        println!("cargo:rustc-link-lib=GL");
+        println!("cargo:rustc-link-lib=dl");
+        println!("cargo:rustc-link-lib=pthread");
+    } else if target_os == "macos" {
+        println!("cargo:rustc-link-lib=framework=Foundation");
+        println!("cargo:rustc-link-lib=framework=AppKit");
+        println!("cargo:rustc-link-lib=framework=OpenGL");
+        println!("cargo:rustc-link-lib=framework=CoreVideo");
+    }
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
